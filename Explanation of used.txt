@@ -1,0 +1,10 @@
+| Component          | Why Used                       | Why Not Others                 |
+| ------------------ | ------------------------------ | ------------------------------ |
+| **Ubuntu VM**      | Lightweight, Docker compatible | No need for Windows, etc.      |
+| **Docker**         | Easy container deployment      | Kubernetes overkill here       |
+| **Keycloak**       | Powerful open-source IAM       | No vendor lock-in              |
+| **Postgres**       | Keycloak supported, stable     | MySQL requires more tuning     |
+| **Nginx**          | Simple static file hosting     | No backend app required        |
+| **Terraform**      | Infra as Code, modular         | No need for ARM templates      |
+| **Ansible**        | Agentless VM provisioning      | Bash too error-prone for this  |
+| **GitHub Actions** | Native CI/CD, simple to run    | External pipelines unnecessary |

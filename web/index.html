@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Hylastix Protected Page</title>
+  <script src="https://cdn.jsdelivr.net/npm/keycloak-js@latest/dist/keycloak.min.js"></script>
+</head>
+<body>
+  <script>
+    const keycloak = new Keycloak({
+      url: 'http://<VM_PUBLIC_IP>:8080/',
+      realm: 'hylastix-realm',
+      clientId: 'hylastix-web'
+    });
+
+    keycloak.init({ onLoad: 'login-required' }).then(function(authenticated) {
+      document.body.innerHTML = `
+        <h1>Welcome, ${keycloak.tokenParsed.preferred_username}!</h1>
+        <p>You are authenticated with Keycloak.</p>
+      `;
+    }).catch(function() {
+      alert('Failed to initialize Keycloak');
+    });
+  </script>
+</body>
+</html>

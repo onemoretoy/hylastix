@@ -1,0 +1,78 @@
+- name: Wait for Keycloak to be available
+  uri:
+    url: http://localhost:8080/
+    method: GET
+    status_code: 200
+  register: keycloak_status
+  retries: 15
+  delay: 10
+  until: keycloak_status.status == 200
+
+- name: Get Keycloak admin access token
+  uri:
+    url: http://localhost:8080/realms/master/protocol/openid-connect/token
+    method: POST
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body: >
+      username=admin&password=admin&grant_type=password&client_id=admin-cli
+    body_format: form-urlencoded
+    return_content: yes
+  register: keycloak_token
+
+- name: Create hylastix-realm
+  uri:
+    url: http://localhost:8080/admin/realms
+    method: POST
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ keycloak_token.json.access_token }}"
+    body_format: json
+    body:
+      realm: hylastix-realm
+      enabled: true
+  ignore_errors: true
+
+- name: Create client (hylastix-web)
+  uri:
+    url: http://localhost:8080/admin/realms/hylastix-realm/clients
+    method: POST
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ keycloak_token.json.access_token }}"
+    body_format: json
+    body:
+      clientId: hylastix-web
+      enabled: true
+      publicClient: true
+      redirectUris:
+        - "http://{{ ansible_host }}/*"
+      standardFlowEnabled: true
+  ignore_errors: true
+
+- name: Create test user
+  uri:
+    url: http://localhost:8080/admin/realms/hylastix-realm/users
+    method: POST
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ keycloak_token.json.access_token }}"
+    body_format: json
+    body:
+      username: testuser
+      enabled: true
+      emailVerified: true
+  ignore_errors: true
+
+- name: Get test user ID
+  uri:
+    url: http://localhost:8080/admin/realms/hylastix-realm/users?username=testuser
+    method: GET
+    headers:
+      Authorization: "Bearer {{ keycloak_token.json.access_token }}"
+    return_content: true
+  register: test_user_id
+
+- name: Set test user password
+  uri:
+    url: "http:"

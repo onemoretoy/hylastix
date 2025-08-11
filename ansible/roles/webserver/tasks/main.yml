@@ -1,0 +1,28 @@
+- name: Copy static web files
+  copy:
+    src: ../../web/
+    dest: /usr/share/nginx/html/
+    remote_src: no
+
+- name: Create web root directory
+  file:
+    path: /opt/hylastix-web
+    state: directory
+
+- name: Template static web page with VM IP
+  template:
+    src: index.html.j2
+    dest: /opt/hylastix-web/index.html
+  vars:
+    vm_ip: "{{ ansible_host }}"
+
+- name: Deploy hylastix-webserver container
+  docker_container:
+    name: hylastix-webserver
+    image: nginx:latest
+    state: started
+    restart_policy: always
+    ports:
+      - "80:80"
+    volumes:
+      - /usr/share/nginx/html/:/usr/share/nginx/html:ro

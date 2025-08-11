@@ -1,0 +1,7 @@
+| Feature                              | Benefit                                 |
+| ------------------------------------ | --------------------------------------- |
+| Use HTTPS with Let's Encrypt         | Secure web access                       |
+| Host on Azure Kubernetes Service     | Scalable, production-grade architecture |
+| Add backend (Flask/Node.js)          | Enable protected dynamic content        |
+| Store Terraform state remotely       | Safer for team collaboration            |
+| Add monitoring (Grafana, Prometheus) | Observability of container health       |

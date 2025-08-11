@@ -1,0 +1,9 @@
+- name: Set up Docker containers on Azure VM
+  hosts: hylastix
+  become: yes
+
+  roles:
+    - docker
+    - postgres
+    - keycloak
+    - webserver

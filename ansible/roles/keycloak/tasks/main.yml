@@ -1,0 +1,19 @@
+- name: Deploy hylastix-keycloak container
+  docker_container:
+    name: hylastix-keycloak
+    image: quay.io/keycloak/keycloak:latest
+    state: started
+    restart_policy: always
+    command: ["start-dev"]
+    env:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: 172.17.0.1
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloakpass
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+
+- import_tasks: configure.yml
